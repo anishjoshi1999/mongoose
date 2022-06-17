@@ -9,8 +9,9 @@
 	<h1>All Products !</h1>
 	<ul>
 		<%for(let product of products){%>
-		<li><%=product.name.toUpperCase()%></li>
+		<a href="/products/<%=product._id%>"><li><%=product.name.toUpperCase()%> </li></a>
 		<%}%>
 	</ul>
+	<a href="/products/new">Create New Products</a>
 </body>
 </html>
