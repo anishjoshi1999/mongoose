@@ -1,11 +1,15 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const Product = require('./models/product');
+const methodOverride = require('method-override');
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }))
+// override with POST having ?_method=""
+app.use(methodOverride('_method'));
+
 mongoose.connect('mongodb://localhost:27017/farmStand',{useNewUrlParser:true})
 .then(()=>{
 	console.log("Connection Open!!!")
@@ -31,7 +35,6 @@ app.get('/products/new',(req,res)=>{
 })
 app.post('/products',async (req,res)=>{
 	const newProduct = req.body;
-	console.log(newProduct)
 	await Product.create({...newProduct},(err,product)=>{
 		if(err){
 			console.log(err)
@@ -43,9 +46,25 @@ app.post('/products',async (req,res)=>{
 app.get('/products/:id',async (req,res)=>{
 	const { id } = req.params;
 	const product = await Product.findById(id)
-	console.log(product)
 	res.render('products/show',{product});
 
+})
+// form to update a product
+app.get('/products/:id/edit',async (req,res)=>{
+	const { id } = req.params;
+	const product = await Product.findById(id);
+	res.render('products/edit',{product})
+})
+app.put('/products/:id',async (req,res)=>{
+	const { id } = req.params;
+	const product = await Product.findByIdAndUpdate(id,req.body,{runValidators:true,new:true})
+	res.redirect('/products');
+
+})
+app.delete('/products/:id',async(req,res)=>{
+	const {id} = req.params;
+	await Product.findByIdAndDelete(id)
+	res.redirect('/products')
 })
 
 
