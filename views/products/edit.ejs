@@ -13,8 +13,12 @@
 		<label for="price">Price:</label>
 		<input type="number" name="price" id="price" value="<%=product.price%>">
 		<br>
-		<label for="category">Category:</label>
-		<input type="text" name="category" id="category" value="<%=product.category%>">
+		<label for="category">Edit Category:</label>
+		<select name="category" id="category">
+			<option value="fruit">Fruit</option>
+			<option value="vegetable">Vegetable</option>
+			<option value="dairy">Dairy</option>
+		</select>
 		<br>
 		<button>Edit Product</button>
 	</form>
